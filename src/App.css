@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  color: black;
+  font-size: larger;
+  font-weight: bold;
 }
 
 .App-logo {
@@ -22,6 +25,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  background-color: blanchedalmond;
 }
 
 .App-link {
@@ -35,4 +39,30 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.content {
+  padding: 20px;
+}
+
+.header {
+  padding: 10 px;
+  text-decoration: none;
+  background:  #edf2f4;
+  border-bottom: 1px solid #999;
+}
+.header a {
+  color: #0072ff;
+  text-decoration: none;
+  margin-left: 20px;
+  margin-right: 5px;
+}
+.header a:hover {
+  color: #8a0f53;
+}
+.header small {
+  color: #666;
+}
+.header .active {
+  color: #2c7613;
 }

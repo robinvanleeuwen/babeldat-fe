@@ -1,25 +1,41 @@
-import logo from './logo.svg';
 import './App.css';
+import * as React from 'react';
+import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
+import PublicRoute from './utils/PublicRoute';
+import Login from './components/Login.js';
+import Home from './components/Home.js';
+import Menu from './components/Menu.js';
 
-function App() {
+function App(props) {
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="root" className="App">
+      <BrowserRouter>
+        <div className="header">
+          <NavLink exact activeClassName="active" to="/">
+            Home
+          </NavLink>
+          <NavLink activeClassName="active" to="/login">
+            Login<small>(Access without token only)</small>
+          </NavLink>
+          <NavLink activeClassName="active" to="/menu">
+            Menu<small>(Access with token only)</small>
+          </NavLink>
+        </div>
+        <div className="content">
+          <Switch>
+            <Route path="/login" component={Login} />
+            <PublicRoute exact path="/" component={Home} />
+            <PrivateRoute path="/menu" component={Menu} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     </div>
+    
   );
-}
+};
+
 
 export default App;

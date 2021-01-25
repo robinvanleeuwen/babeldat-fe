@@ -7,6 +7,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.login-container-col {
+  float: left;
+  width: auto;
+  display: flex;
+}
+
+.login-container-row::after {
+  display: flex;
+  content: "";
+  display: table;
+  clear: both;
+  text-align: center;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
