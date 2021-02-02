@@ -4,7 +4,7 @@ import { getToken } from './Common.js';
 
 function PrivateRoute({component: Component, ...rest}){
     return (
-        <Route {...rest}
+        <Route {...rest} 
             render={(props) => getToken() ? <Component {...props} /> 
             : <Redirect to = {
                     {pathname: '/login', state: {from: props.location}}

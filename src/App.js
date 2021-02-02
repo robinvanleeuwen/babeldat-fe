@@ -1,4 +1,5 @@
 import './App.css';
+import 'fontsource-roboto';
 import * as React from 'react';
 import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
@@ -6,6 +7,7 @@ import PublicRoute from './utils/PublicRoute';
 import Login from './components/Login.js';
 import Home from './components/Home.js';
 import Menu from './components/Menu.js';
+import Model from './components/Models.js';
 
 function App(props) {
 
@@ -29,6 +31,7 @@ function App(props) {
             <Route path="/login" component={Login} />
             <PublicRoute exact path="/" component={Home} />
             <PrivateRoute path="/menu" component={Menu} />
+            <PrivateRoute path="/model/:modelname" component={Model} />
           </Switch>
         </div>
       </BrowserRouter>
