@@ -5,7 +5,6 @@ import axios from 'axios';
 import { setUserSession, removeUserSession } from '../utils/Common.js';
 
 function Login(props) { 
-
     const account = useFormInput('');
     const password = useFormInput('');
     const [, setError] = useState(null);
@@ -36,14 +35,14 @@ function Login(props) {
                 response.data.result.token.account,
                 response.data.result.token.code,
             );
-            props.history.push("/");
+            window.location.reload();
             
         }).catch(error =>{
             console.log("Cought Error in Login: "+ error);
             removeUserSession();
             setLoading(false);    
         });
-        
+
     };
 
     const checkKey = (e) => {
@@ -64,7 +63,7 @@ function Login(props) {
             <label htmlFor="password">Password</label>
             <input type="password" {...password } onKeyDown={checkKey} />
             <br/>
-            <button type="button" value="Sign In"  onClick={handleLogin}>Log In</button>
+            <button type="button" value="Sign In"  onClick={() => handleLogin()}>Log In</button>
             <br/>
             <p className="small">Forgot your password?</p>
         </div>

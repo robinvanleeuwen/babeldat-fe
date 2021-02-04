@@ -3,8 +3,10 @@ import './App.css';
 import 'fontsource-roboto';
 import Menu from './components/Menu.js';
 import Model from './components/Models.js';
-import { getToken } from './utils/Common';
+import { getToken, removeUserSession } from './utils/Common';
 import Login from './components/Login';
+import { useHistory } from 'react-router';
+import { Button } from 'react-bootstrap';
 
 export const AppContext = React.createContext();
 
@@ -25,8 +27,8 @@ function reducer(state, action) {
 
 
 function App() {
-  
   const [state, dispatch] = useReducer(reducer, initialState);
+  var history = useHistory();
 
   if (!getToken()) {
     return (
@@ -35,6 +37,11 @@ function App() {
       </div>
     )
   }
+
+  const handleLogout = (history) => {
+    removeUserSession();
+    window.location.reload();
+  };
 
   return (
     <div id="root" className="App">
@@ -48,7 +55,7 @@ function App() {
               <Model modelname="client" />
             </div>
             <div className="column-small" id="rightblock">
-              This is the right block.
+              <Button onClick={() => handleLogout(history)}>Logout</Button>
             </div>
           </AppContext.Provider>
         </div>
