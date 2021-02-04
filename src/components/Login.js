@@ -55,7 +55,7 @@ function Login(props) {
 
         <div className="login-box animated fadeInUp">
             <div className="box-header">
-                <h2>Babeldat Login</h2>
+                <h2>Samarra Login</h2>
             </div>
             <label htmlFor="account">Account</label>
             <input type="text" {...account } onKeyDown={checkKey} />
