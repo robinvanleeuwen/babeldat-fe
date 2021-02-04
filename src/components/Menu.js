@@ -1,76 +1,82 @@
 import React from 'react';
-import { getAccount, removeUserSession, getToken } from '../utils/Common';
+import { getToken, getAccount } from '../utils/Common';
 import axios from 'axios';
+import { Accordion , Card , Button } from 'react-bootstrap';
 
+
+function MenuItems(menu) {
+
+
+
+
+    const getMenuItems = (menu_items) => {
+        return menu_items.map((item) => {
+            return (
+                <div className="menu-item-div"><Button  className="menu-item">{item.description}</Button></div>
+            )
+        })
+    };
+    const renderCard = (menu) => {
+        if (Array.isArray(menu)) {
+            return menu.map((menu, index) => {
+                    
+                    return (
+                        <Card>
+                        <Card.Header>
+                            <Accordion.Toggle as={Button} eventKey={index.toString()}>
+                                {menu.description}
+                            </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey={index.toString()}>
+                            <Card.Body>
+                            { getMenuItems(menu.items) }
+                            </Card.Body>
+                        </Accordion.Collapse>
+                        </Card>
+                    )
+                }
+            );
+        } else {
+            return null;
+        }
+    };
+
+    return (
+
+        <Accordion defaultActiveKey="0">
+            {renderCard(menu.menu)}
+        </Accordion>
+
+    )
+
+}
 
 
 
 function Menu(props) {
 
-    const account = getAccount();
-    const token = getToken();
-
-    const handleLogout = () => {
-        removeUserSession();
-        props.history.push("/login");
+    const updateStateForModel = (modelname) => {
+        setState({data: modelname});
     }
 
-    getMenu(account, token).then( res => {
-        console.log(res);
-        const menu = res.data.result;
-        for (const key in menu) {
-            console.log(key);
-        }
-        console.log(menu);
-    
-    });
+    let [state, setState] = React.useState({data:""}) 
+    let [menu, setMenu] = React.useState("");
 
-    return  (
-           <div class="row">
-               <div class="column-small" align="left">
-               <div class="container">
-                <nav class="menu">
-                    <ul>
-                        <input type="radio" name="menu" id="archive" checked />
-                        <li>
-                            <label for="archive" class="title"><i class="fa fa-folder"></i>Master Data Maintenance</label>
-                            <a href="/model/sites">Sites</a>
-                            <a href="#">Warehouse</a>
-                            <a href="#">Countries</a>
-                            <a href="#">Employees</a>
-                            <a href="#">Clients</a>
-                            <a href="#">Carriers</a>
-                        </li>
-                        <input type="radio" name="menu" id="edit" />
-                        <li>
-                            <label for="edit" class="title"><i class="fa fa-edit"></i>Warehouse</label>
-                            <a href="#">Warehouselocations</a>
-                            <a href="#">SKU</a>
-                        </li>
-                        <input type="radio" name="menu" id="tools" />
-                        <li>
-                            <label for="tools" class="title"><i class="fa fa-gavel"></i>Transport</label>
-                            <a href="#">Vehicles</a>
-                            <a href="#">Vehicle Types</a>
-                        </li>
-                        <input type="radio" name="menu" id="preferences" />
-                        <li>
-                            <label for="preferences" class="title"><i class="fa fa-gears"></i>Preferences</label>
-                            <a href="#">Browser</a>
-                            <a href="#">Settings</a>
-                            <a href="#">Packages</a>
-                            <a href="#">Theme</a>
-                        </li>
-                    </ul>
-                </nav>
-                   
-               </div>
+    React.useEffect(() => {
+        const fetchMenu = async () => {
+            console.log("Retrieving the menu.")
+            const account = getAccount();
+            const token = getToken();        
+            const response = await getMenu(account, token);
+            console.log("Setting the menu in State")
+            setMenu(response.data.result.menu);
+        };
+        fetchMenu();
+    }, []);
 
-            </div>
-           </div>
-           
+    return (
+        <MenuItems menu={menu}/>
     );
-
 } 
 
 const getMenu = async (account, token) => {
@@ -89,9 +95,10 @@ const getMenu = async (account, token) => {
     }
     
     const result = axios.post(
-        "http://127.0.0.1:5005/api", 
+        sessionStorage.getItem('apiUrl'), 
         data
     );
     return result;
 }
+
 export default Menu;
