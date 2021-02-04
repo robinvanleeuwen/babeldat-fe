@@ -1,8 +1,7 @@
-import React from 'react';
-import Menu from './Menu';
-import { useParams } from "react-router-dom";
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { Button, Form, Tabs, Tab } from 'react-bootstrap';
+import { AppContext } from '../App.js';
 
 function DatasetForm({layout}) {
 
@@ -79,6 +78,7 @@ function onSubmit(values) {
 
 function Model(props) {
     const [layout, setLayout] = React.useState("");
+    const {state, dispatch} = useContext(AppContext);
 
     React.useEffect(() => {
 
@@ -86,13 +86,14 @@ function Model(props) {
             const response = await getModelLayout(modelname);
             setLayout(response.data.result);
         };
-        if (props.modelname != undefined) {
-            fetchLayout(props.modelname);
+        console.log(state.modelname);
+        if (state.modelname != undefined && state.modelname != "") {
+            fetchLayout(state.modelname);
         } else {
             setLayout(null)
         }
 
-    }, []);
+    }, [state.modelname]);
     if (layout == null) {
         return null
     } else {

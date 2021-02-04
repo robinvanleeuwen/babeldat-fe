@@ -8,8 +8,8 @@ function Login(props) {
 
     const account = useFormInput('');
     const password = useFormInput('');
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [, setError] = useState(null);
+    const [, setLoading] = useState(false);
 
     const handleLogin = () => {
         setError(null);
@@ -27,7 +27,6 @@ function Login(props) {
                 "api_developer_key": "1",
                 "device_code": "1",
                 "timezone": "Europe/Amsterdam"
-
             }
         }
         axios.post('http://127.0.0.1:5005/api', data).then(response => {
@@ -37,11 +36,10 @@ function Login(props) {
                 response.data.result.token.account,
                 response.data.result.token.code,
             );
-            props.history.push('/menu');
-        
+            props.history.push("/");
             
         }).catch(error =>{
-            console.log("Counght Error in Login: "+ error);
+            console.log("Cought Error in Login: "+ error);
             removeUserSession();
             setLoading(false);    
         });

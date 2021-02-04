@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { getToken, getAccount } from '../utils/Common';
 import axios from 'axios';
 import { Accordion , Card , Button } from 'react-bootstrap';
-
+import { AppContext } from '../App.js';
 
 function MenuItems(menu) {
 
+    const {state, dispatch} = useContext(AppContext);
 
-
+    const handleMenuItemClick = (dataset_id) => {
+        console.log("Updating State with: "+ dataset_id);
+        dispatch({ type: "UPDATE_INPUT", data: dataset_id, });
+    };
 
     const getMenuItems = (menu_items) => {
         return menu_items.map((item) => {
             return (
-                <div className="menu-item-div"><Button  className="menu-item">{item.description}</Button></div>
+                <div className="menu-item-div"><Button onClick={() => handleMenuItemClick(item.dataset)} className="menu-item">{item.description}</Button></div>
             )
         })
     };
+
     const renderCard = (menu) => {
         if (Array.isArray(menu)) {
             return menu.map((menu, index) => {
@@ -50,8 +55,6 @@ function MenuItems(menu) {
     )
 
 }
-
-
 
 function Menu(props) {
 
