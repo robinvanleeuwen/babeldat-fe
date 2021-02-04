@@ -32,6 +32,7 @@ function Login(props) {
         }
         axios.post('http://127.0.0.1:5005/api', data).then(response => {
             setLoading(false);
+            console.log("Setting the usersession with token and account.")
             setUserSession(
                 response.data.result.token.account,
                 response.data.result.token.code,
