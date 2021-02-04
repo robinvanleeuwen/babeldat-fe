@@ -1,11 +1,13 @@
-import axios from "axios";
+import React from 'react';
 
 export const setUserSession = (account, token) => {
-    sessionStorage.setItem('account', JSON.stringify(account).replace(/\"/g, ""));
+    console.log(account+":"+token+" Is being set in sessionStorage.")
+    sessionStorage.setItem('account', JSON.stringify(account).replace(/"/g, ""));
     sessionStorage.setItem('token', token);
 }
 
 export const removeUserSession = () => {
+    console.log("Removing user session");
     sessionStorage.removeItem('account');
     sessionStorage.removeItem('token');
 }
@@ -21,8 +23,5 @@ export const getToken = () => {
 }
 
 const apiUrl = "http://127.0.0.1:5005/api";
-export const doRequest = async (data) => {
-    const response = await axios.post(apiUrl, data).then((response) => {
-        return response;
-    });
-}
+sessionStorage.setItem('apiUrl', apiUrl);
+console.log("apiUrl set in sessionStorage");
