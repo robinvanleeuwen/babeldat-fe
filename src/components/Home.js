@@ -1,5 +1,4 @@
 import React from 'react';
-import { getAccount } from '../utils/Common';
 
 function Home(props) {
 
