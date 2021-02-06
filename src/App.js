@@ -44,12 +44,12 @@ function App() {
   };
 
   return (
-    <div id="root" className="App">
+    <div id="root" className="App" key="app-root">
         <div className="content">  
         <div className="row">
           <AppContext.Provider value={{state, dispatch}}>
             <div className="column-small" id="leftblock">
-              <Menu />
+              <Menu key="menu" />
             </div>
             <div className="column-medium" id="mainblock">
               <Model modelname="client" />

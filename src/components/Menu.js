@@ -16,7 +16,12 @@ function MenuItems(menu) {
     const getMenuItems = (menu_items) => {
         return menu_items.map((item) => {
             return (
-                <div className="menu-item-div"><Button onClick={() => handleMenuItemClick(item.dataset)} className="menu-item">{item.description}</Button></div>
+                <div className="menu-item-div">
+                    <Button onClick={() => handleMenuItemClick(item.dataset)} 
+                    className="menu-item">
+                        {item.description}
+                    </Button>
+                </div>
             )
         })
     };
@@ -28,7 +33,9 @@ function MenuItems(menu) {
                     return (
                         <Card>
                         <Card.Header>
-                            <Accordion.Toggle as={Button} eventKey={index.toString()}>
+                            <Accordion.Toggle 
+                            as={Button} 
+                            eventKey={index.toString()}>
                                 {menu.description}
                             </Accordion.Toggle>
                         </Card.Header>
@@ -78,7 +85,7 @@ function Menu(props) {
     }, []);
 
     return (
-        <MenuItems menu={menu}/>
+        <MenuItems menu={menu} key="mainmenu" />
     );
 } 
 

@@ -3,6 +3,7 @@ import '../css/animate.css';
 import '../css/style.css';
 import axios from 'axios';
 import { setUserSession, removeUserSession } from '../utils/Common.js';
+import { uuid } from 'uuidv4';
 
 function Login(props) { 
     const account = useFormInput('');
@@ -17,7 +18,7 @@ function Login(props) {
 
         let data = {
             "jsonrpc": "2.0",
-            "id": "12345",
+            "id": uuid(),
             "method": "auth.login",
             "params": {
                 "account": account.value,

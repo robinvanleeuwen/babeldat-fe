@@ -22,6 +22,10 @@ export const getToken = () => {
     return sessionStorage.getItem("token") || null;
 }
 
+
 const apiUrl = "http://127.0.0.1:5005/api";
 sessionStorage.setItem('apiUrl', apiUrl);
-console.log("apiUrl set in sessionStorage");
+
+// const apiUrl = fetch(process.env.API_URL).then((url) => {
+//     console.log("I've got: "+JSON.stringify(url));
+// });

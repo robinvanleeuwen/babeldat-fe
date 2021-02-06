@@ -7,15 +7,48 @@ function DatasetForm({layout}) {
 
     const renderUIGroupFields = (fields) => {
         if (Array.isArray(fields)){
-            return fields.map((field) => {
-                return (
-                    <div key={field.id}>
-                        <Form.Label className="my-1 mr-2 form-label" key={`${field.id}-description`} htmlFor={field.id}>{field.description}</Form.Label>
-                        <Form.Control className="my-1 mr-sm-2" key={field.id} type="text" id={field.id}></Form.Control>
-                    </div>
-                );
-            });
-        } else {
+            
+            return fields.map(
+
+                (field) => {
+
+                    console.log("Determining field '"+field.id+"'");
+                    const disabled = field.permissions == "r"? true: false;
+
+                    if(field.htmltype == "text" || field.htmltype == "numeric"){      
+                            return (
+                                <div>
+                                    <Form.Label 
+                                    className="my-1" 
+                                    >
+                                        {field.description}
+                                    </Form.Label>
+                                    <Form.Control 
+                                        disabled={disabled}
+                                        className="my-1 mr-sm-2" 
+                                        type="text"
+                                        id={field.id} />
+                                </div>
+                            );
+                    }
+                    if(field.htmltype == "checkbox"){     
+                            return (
+                                <div>
+                                    <Form.Check
+                                        disabled={disabled}
+                                        label={field.description}
+                                        type="checkbox" 
+                                        id={field.id}
+                                        className="mb-3" 
+                                        key={field.id} />
+                                    
+                                </div>
+                            );
+                    }
+                } 
+            ) 
+        }    
+        else {
             return null;
         }
     }
@@ -26,7 +59,10 @@ function DatasetForm({layout}) {
 
             return layout.dataset_layout.ui_groups.map(group => {
                 return (
-                <Tab className="dataset-tab" eventKey={group.id} title={group.description}>
+                <Tab 
+                className="dataset-tab" 
+                eventKey={group.id} 
+                title={group.description}>
                     { renderUIGroupFields(group.elements) }
                 </Tab>
                 )
@@ -42,10 +78,18 @@ function DatasetForm({layout}) {
         if (typeof(layout) == "object") {
 
             return layout.dataset_layout.primary_ui_group.map(field => {
-               return (
-                    <div key={field.id}>
-                        <Form.Label className="my-1 mr-2 form-label" key={`${field.id}-description`} htmlFor={field.id}>{field.description}</Form.Label>
-                        <Form.Control className="my-1 mr-sm-2" key={field.id} type="text" id={field.id}></Form.Control>
+
+                return (
+                    <div>
+                        <Form.Label 
+                        className="my-1 mr-2 form-label" 
+                        >
+                            {field.description}
+                        </Form.Label>
+                        <Form.Control 
+                        className="my-1 mr-sm-2" 
+                        type="text" 
+                        id={field.id} />
                     </div>
                );
             })
@@ -98,7 +142,7 @@ function Model(props) {
         return null
     } else {
         return (
-            <DatasetForm layout={layout} />
+            <DatasetForm layout={layout}  key={`${layout.dataset_description}-form`} />
         )
     }
 }
