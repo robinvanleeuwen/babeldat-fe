@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const setUserSession = (account, token) => {
     console.log(account+":"+token+" Is being set in sessionStorage.")
     sessionStorage.setItem('account', JSON.stringify(account).replace(/"/g, ""));

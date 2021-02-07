@@ -65,11 +65,6 @@ function MenuItems(menu) {
 
 function Menu(props) {
 
-    const updateStateForModel = (modelname) => {
-        setState({data: modelname});
-    }
-
-    let [state, setState] = React.useState({data:""}) 
     let [menu, setMenu] = React.useState("");
 
     React.useEffect(() => {
