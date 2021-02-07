@@ -2,100 +2,85 @@ import React, { useContext } from 'react';
 import axios from 'axios';
 import { Button, Form, Tabs, Tab } from 'react-bootstrap';
 import { AppContext } from '../App.js';
+import MarField from './MarField';
 
 function DatasetForm({layout}) {
 
-    const renderUIGroupFields = (fields) => {
-        if (Array.isArray(fields)){
-            
-            return fields.map(
-
-                (field) => {
-
-                    console.log("Determining field '"+field.id+"'");
-                    const disabled = field.permissions == "r"? true: false;
-
-                    if(field.htmltype == "text" || field.htmltype == "numeric"){      
-                            return (
-                                <div>
-                                    <Form.Label 
-                                    className="my-1" 
-                                    >
-                                        {field.description}
-                                    </Form.Label>
-                                    <Form.Control 
-                                        disabled={disabled}
-                                        className="my-1 mr-sm-2" 
-                                        type="text"
-                                        id={field.id} />
-                                </div>
-                            );
-                    }
-                    if(field.htmltype == "checkbox"){     
-                            return (
-                                <div>
-                                    <Form.Check
-                                        disabled={disabled}
-                                        label={field.description}
-                                        type="checkbox" 
-                                        id={field.id}
-                                        className="mb-3" 
-                                        key={field.id} />
-                                    
-                                </div>
-                            );
-                    }
-                } 
-            ) 
-        }    
-        else {
-            return null;
-        }
-    }
-
-    const renderUIGroupTabs = (layout) => {
-
-        if (typeof(layout) == "object"){
-
-            return layout.dataset_layout.ui_groups.map(group => {
-                return (
-                <Tab 
-                className="dataset-tab" 
-                eventKey={group.id} 
-                title={group.description}>
-                    { renderUIGroupFields(group.elements) }
-                </Tab>
-                )
-            })
-
-        } else {
-            return <div>Loading...</div>
-        }
-    }
-
+    
     const renderPrimaryUIFields = (layout) => {
 
         if (typeof(layout) == "object") {
 
             return layout.dataset_layout.primary_ui_group.map(field => {
 
-                return (
-                    <div>
-                        <Form.Label 
-                        className="my-1 mr-2 form-label" 
-                        >
-                            {field.description}
-                        </Form.Label>
-                        <Form.Control 
-                        className="my-1 mr-sm-2" 
-                        type="text" 
-                        id={field.id} />
-                    </div>
-               );
-            })
+                return <MarField field={field}></MarField>;
+            });
         } else {
             return <div>Loading...</div>
         }
+    }
+    
+    const renderUIGroupFields = (fields) => {
+        if (Array.isArray(fields)){
+            return fields.map(
+                (field) => {
+                    return <MarField field={field}></MarField>;
+                }
+            ) 
+        }    
+        else {
+            console.log("Could not render UIGroup fields, not an array.");
+            return null;
+        }
+    }
+
+    const renderSubgroupTabs = (layout) => {
+        if (typeof(layout) != "object"){
+            return <div>Loading...</div>
+        }
+        let subgroups = [];
+        layout.dataset_layout.ui_groups.map((group) => {
+            group.elements.map((field) => {
+                if(field.type === "subgroup") {
+                    subgroups.push(field);
+                }
+                return null;
+            });
+            return null;
+        });
+
+        return subgroups.map((group) => {
+            return (
+                <Tab
+                key={group.subgroup_id} 
+                className="dataset-tab" 
+                eventKey={group.subgroup_id} 
+                title={group.caption}>
+                    { renderUIGroupFields(group.elements) }
+                </Tab>
+                )
+        })
+
+    }
+
+    const renderUIGroupTabs = (layout) => {
+
+        if (typeof(layout) != "object"){
+            return <div>Loading...</div>
+        }
+
+        return layout.dataset_layout.ui_groups.map(group => {
+            return (
+            <Tab
+            key={group.id} 
+            className="dataset-tab" 
+            eventKey={group.id} 
+            title={group.description}>
+                { renderUIGroupFields(group.elements) }
+            </Tab>
+            )
+        });
+
     }
 
     return (
@@ -108,6 +93,7 @@ function DatasetForm({layout}) {
             <Form.Group>
                 <Tabs defaultActiveKey="generic">
                     { renderUIGroupTabs(layout) }
+                    { renderSubgroupTabs(layout) }
                 </Tabs>
             </Form.Group>
             <hr />
@@ -122,7 +108,7 @@ function onSubmit(values) {
 
 function Model(props) {
     const [layout, setLayout] = React.useState("");
-    const {state, dispatch} = useContext(AppContext);
+    const {state, } = useContext(AppContext);
 
     React.useEffect(() => {
 
@@ -131,7 +117,7 @@ function Model(props) {
             setLayout(response.data.result);
         };
         console.log(state.modelname);
-        if (state.modelname != undefined && state.modelname != "") {
+        if (state.modelname !== undefined && state.modelname !== "") {
             fetchLayout(state.modelname);
         } else {
             setLayout(null)
