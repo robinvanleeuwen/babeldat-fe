@@ -3,11 +3,38 @@ import axios from 'axios';
 import { Button, Form, Tabs, Tab } from 'react-bootstrap';
 import { AppContext } from '../App.js';
 import MarField from './MarField';
+import { Component } from 'react';
 
-function DatasetForm({layout}) {
+class DatasetForm extends Component {
 
+    constructor(props) {
+        super(props);
+        let primaryFields = [];
+        let groupedFields = [];
+        if (props.layout !== "") {
+            primaryFields = props.layout.dataset_layout.primary_ui_group.map(field => {
+                return field.id
+            });
+            
+            props.layout.dataset_layout.ui_groups.map((group) => {
+                group.elements.map((field) => {
+                    if(field.type == "field") {
+                        groupedFields.push(field.id);
+                    } else if (field.type == "subgroup") {
+                        field.elements.map((f) => {
+                            groupedFields.push(f.id);
+                        });
+                    }
+                    return null;
+                });
+                return null;
+            });
+
+            console.log(groupedFields);
+        }
+    }
     
-    const renderPrimaryUIFields = (layout) => {
+    renderPrimaryUIFields = (layout) => {
 
         if (typeof(layout) == "object") {
 
@@ -20,7 +47,7 @@ function DatasetForm({layout}) {
         }
     }
     
-    const renderUIGroupFields = (fields) => {
+    renderUIGroupFields = (fields) => {
         if (Array.isArray(fields)){
             return fields.map(
                 (field) => {
@@ -34,7 +61,7 @@ function DatasetForm({layout}) {
         }
     }
 
-    const renderSubgroupTabs = (layout) => {
+    renderSubgroupTabs = (layout) => {
         if (typeof(layout) != "object"){
             return <div>Loading...</div>
         }
@@ -56,14 +83,14 @@ function DatasetForm({layout}) {
                 className="dataset-tab" 
                 eventKey={group.subgroup_id} 
                 title={group.caption}>
-                    { renderUIGroupFields(group.elements) }
+                    { this.renderUIGroupFields(group.elements) }
                 </Tab>
                 )
         })
 
     }
 
-    const renderUIGroupTabs = (layout) => {
+    renderUIGroupTabs = (layout) => {
 
         if (typeof(layout) != "object"){
             return <div>Loading...</div>
@@ -76,34 +103,35 @@ function DatasetForm({layout}) {
             className="dataset-tab" 
             eventKey={group.id} 
             title={group.description}>
-                { renderUIGroupFields(group.elements) }
+                { this.renderUIGroupFields(group.elements) }
             </Tab>
             )
         });
 
     }
 
-    return (
-        <Form onSubmit={onSubmit}>
-            <h3>{layout.dataset_description}</h3>
+    render() {
+        return (
+            <Form onSubmit={onSubmit}>
+            <h3>{ this.props.layout.dataset_description }</h3>
             <Form.Group>
-                { renderPrimaryUIFields(layout) }
+                { this.renderPrimaryUIFields(this.props.layout) }
             </Form.Group>
             <hr />
             <Form.Group>
                 <Tabs defaultActiveKey="generic">
-                    { renderUIGroupTabs(layout) }
-                    { renderSubgroupTabs(layout) }
+                    { this.renderUIGroupTabs(this.props.layout) }
+                    { this.renderSubgroupTabs(this.props.layout) }
                 </Tabs>
             </Form.Group>
             <hr />
             <Button type="submit">Save</Button>
         </Form>
-    );
+        );
+    }
 }
 
 function onSubmit(values) {
-    console.log(values);
 }
 
 function Model(props) {
@@ -116,7 +144,6 @@ function Model(props) {
             const response = await getModelLayout(modelname);
             setLayout(response.data.result);
         };
-        console.log(state.modelname);
         if (state.modelname !== undefined && state.modelname !== "") {
             fetchLayout(state.modelname);
         } else {

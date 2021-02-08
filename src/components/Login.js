@@ -29,7 +29,9 @@ function Login(props) {
                 "timezone": "Europe/Amsterdam"
             }
         }
-        axios.post('http://127.0.0.1:5005/api', data).then(response => {
+        const apiUrl = sessionStorage.getItem("apiUrl");
+
+        axios.post(apiUrl, data).then(response => {
             setLoading(false);
             console.log("Setting the usersession with token and account.")
             setUserSession(

@@ -21,7 +21,7 @@ export const getToken = () => {
 }
 
 
-const apiUrl = "http://127.0.0.1:5005/api";
+const apiUrl = "http://www.rldsoftware.nl:5005/api";
 sessionStorage.setItem('apiUrl', apiUrl);
 
 // const apiUrl = fetch(process.env.API_URL).then((url) => {

@@ -4,23 +4,17 @@ function MarField(props) {
 
     let disabled;
 
-
-    // if ("subgroup_id" in props.field) {
-    //     console.debug("We have a subgroup");
-    //     return null;
-    // }
-
     try {
         disabled = props.field.permissions.includes("w")? false: true;
     }
     catch(err) {
-        console.debug("Error found in:" );
-        console.debug(props.field);
         return null;
     }
     
 
-    if(props.field.htmltype === "text" || props.field.htmltype === "numeric"){
+    if (props.field.htmltype === "text" ||
+        props.field.htmltype === "numeric" ||
+        props.field.htmltype === "date") {
             return (
                 <div>
                     <Form.Label 
@@ -29,10 +23,11 @@ function MarField(props) {
                     >
                         {props.field.description}
                     </Form.Label>
-                    <Form.Control 
+                    <Form.Control
+                        key={props.field.id}
                         disabled={disabled}
                         className="my-1 mr-sm-2" 
-                        type="text"
+                        type={props.field.htmltype}
                         id={props.field.id} />
                 </div>
             );
